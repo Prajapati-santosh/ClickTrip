@@ -40,11 +40,5 @@
 
 body {
   background-color: #f0f2f5; 
-  display: flex;
-  justify-content: center; /* Center the login window horizontally */
-  align-items: center; /* Center the login window vertically */
-  min-height: 80vh; /* Make sure it takes full viewport height */
-  margin: 0;
-  font-family: 'Roboto', sans-serif; /* Apply Roboto consistently */
 }
 

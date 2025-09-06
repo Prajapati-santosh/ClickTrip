@@ -1,42 +1,26 @@
 import React, { useState } from 'react';
 import './Login.css';
-import { initializeApp } from 'firebase/app'; 
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-
-
-
-const firebaseConfig = {
-        apiKey:process.env.REACT_APP_API_KEY,
-        authDomain: process.env.REACT_APP_AUTHDOMAIN,
-        projectId: process.env.REACT_APP_PROJECTID,
-        storageBucket: process.env.REACT_APP_STORAGEBUCKET,
-        messagingSenderId: process.env.REACT_APP_MESSAGINGSENDERID,
-        appId:process.env.REACT_APP_APPID,
-        measurementId:process.env.REACT_APP_MESUREMENTID
-        };
-
-// console.log("Firebase config loaded from .env:", firebaseConfig); // ADD THIS LINE
-
-// Initialize Firebase
-let firebaseApp;
-try{
-    firebaseApp = initializeApp(firebaseConfig);
-}
-catch(error){
-    console.log("Failed to initialise the SDK");
-}
-// const analytics = getAnalytics(app);
-const auth = getAuth(firebaseApp);
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { analytics ,auth} from '../Analytics/Firebase';
+import { logEvent } from 'firebase/analytics';
 
 export default function Login() {
     
     const [userName, setUsername] = useState(''); // Initialize with empty strings
     const [password, setPassword] = useState('');
 
+    const handleAnalytics=(userName)=>{
+        logEvent(analytics,'search_performed_app',{
+            uuid : userName,
+            action :"Login Attemplted"
+        });
+    }
+
     const handleLogin = async ()=>{
         console.log('Login attempt with:');
         const username=userName;
         const passkey=password;
+        handleAnalytics(userName);
         signInWithEmailAndPassword(auth,username,passkey)
         .then((userCredential)=>{
             console.log("user logged in" , userCredential.user.email);

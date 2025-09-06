@@ -1,5 +1,11 @@
 /* Login.css improvements */
+.login-container{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
 
+}
 .login-window {
   background-color: #ffffff; /* White background for the card */
   padding: 40px;
