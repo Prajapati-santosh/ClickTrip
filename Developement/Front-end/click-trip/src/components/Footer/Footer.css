@@ -5,7 +5,8 @@
 .footer-main{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    padding: 20px;
+    justify-content: space-evenly;
 }
 .footer-container{
     display: flex;
@@ -14,4 +15,16 @@
 .footer-ul{
     display: flex;
     flex-direction: column;
+    font-family: poppins;
+    font-size: 14px;
+}
+.footer-ul-heading{
+    font-family:poppins;
+    font-weight: 600;
+}
+.footer-logo h1{
+    font-family: Inter;
+}
+.footer-logo h4{
+    font-weight: 400;
 }
