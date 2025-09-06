@@ -1,0 +1,17 @@
+.footer{
+    
+}
+
+.footer-main{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.footer-container{
+    display: flex;
+    flex-direction: row;
+}
+.footer-ul{
+    display: flex;
+    flex-direction: column;
+}

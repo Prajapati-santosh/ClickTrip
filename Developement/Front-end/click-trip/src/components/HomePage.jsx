@@ -1,4 +1,5 @@
 import './HomePage.css';
+import Footer from '../components/Footer/Footer.jsx'
 
 export default function HomePage(){
     return <div className="homepage">
@@ -13,5 +14,6 @@ export default function HomePage(){
         <div className="main-content">
             <input className="input-text" placeholder="Where you want to go next?"></input>
         </div>
+        <Footer/>
     </div>
 }
