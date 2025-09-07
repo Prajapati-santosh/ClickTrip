@@ -3,11 +3,25 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { UserProvider } from './context/userContext';
+import { CityProvider } from './context/LocationContext';
+import { SearchProvider } from './context/SearchContext ';
+import { LoadingProvider } from './context/LoadingContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <LoadingProvider>
+      <SearchProvider>
+        <CityProvider>
+            <UserProvider>
+
+                <App />
+
+            </UserProvider>
+          </CityProvider>
+        </SearchProvider>
+    </LoadingProvider>
   </React.StrictMode>
 );
 
