@@ -18,7 +18,7 @@ describe("Tests gemini response", () => {
     }
     it("Expects gemini response to be (500) and response instance", async () => {
         const res = await request(app).post("/gemini").send(obj);
-        expect(res.statusCode).toEqual(200);
+        expect(res.statusCode).toEqual(500);
     },300000)
 })
 describe("Tests gemini response", () => {
