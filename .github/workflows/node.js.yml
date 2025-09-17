@@ -18,6 +18,9 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    env:
+      GENKIT_API_KEY: ${{ secrets.GOOGLE_GENAI_API_KEY }}
+
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
