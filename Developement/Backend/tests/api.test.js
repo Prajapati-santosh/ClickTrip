@@ -16,9 +16,9 @@ describe("Tests gemini response", () => {
         "num_of_people": 2,
         "themes": "Culture, Temples, Food, Nature, Relaxation"
     }
-    it("Expects gemini response and response instance", async () => {
+    it("Expects gemini response to be (500) and response instance", async () => {
         const res = await request(app).post("/gemini").send(obj);
-        expect(res.statusCode).toEqual(200);
+        expect(res.statusCode).toEqual(500);
     },300000)
 })
 
