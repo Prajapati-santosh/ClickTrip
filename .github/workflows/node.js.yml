@@ -6,8 +6,12 @@ name: Node.js CI
 on:
   push:
     branches: [ "main" ]
+    paths : 
+      - Developement/Backend/**
   pull_request:
     branches: [ "main" ]
+    paths:
+      - Developement/Backend/**
 
 jobs:
   build:
@@ -26,6 +30,14 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm ci --legacy-peer-deps
-    - run: npm run build --if-present
-    - run: npm test
+    - name: Install backend dependencies
+      run: npm ci
+      working-directory: ./Developement/Backend
+    
+    - name: Run backend build
+      run: npm run build --if-present
+      working-directory: ./Developement/Backend
+    
+    - name: Run backend tests
+      run: npm test
+      working-directory: ./Developement/Backend
