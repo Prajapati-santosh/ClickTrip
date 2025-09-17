@@ -12,7 +12,7 @@ describe("Tests gemini response", () => {
     const obj = {
         "location": "Kyoto, Japan",
         "budget": "Mid-range (around $1000-$1500 USD per person)",
-        "days_of_stay": 2,
+        "days_of_stay": 1,
         "num_of_people": 2,
         "themes": "Culture, Temples, Food, Nature, Relaxation"
     }
@@ -34,4 +34,5 @@ describe("Tests gemini response", () => {
         expect(res.statusCode).toEqual(500);
     },300000)
 })
+
 
