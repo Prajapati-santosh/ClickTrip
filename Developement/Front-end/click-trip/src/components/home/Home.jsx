@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Home.scss";
@@ -11,6 +11,7 @@ import Image3 from '../../assets/images/img3.jpg';
 import Image4 from '../../assets/images/img4.jpg';
 import Image5 from '../../assets/images/img5.jpg';
 import Image6 from '../../assets/images/img6.jpg';
+import cities from "../../assets/Cities";
 
 
 const images = [Image1, Image2, Image3, Image4, Image5, Image6];
@@ -30,6 +31,49 @@ function Home() {
   const [dates, setDates] = useState([null, null]);
   const [startDate, endDate] = dates;
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+   const searchBoxRef = useRef(null);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setSuggestions([]);
+    } else {
+      const filtered = cities.filter(city =>
+        city.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (city.state && city.state.toLowerCase().includes(searchQuery.toLowerCase()))
+      );
+      setSuggestions(filtered);
+    }
+  }, [searchQuery]);
+
+
+  const handleSelectCity = (cityName) => {
+    setDestination(cityName);
+    setSearchQuery(cityName);
+    setShowSearch(false);
+    setSuggestions([]);
+  };
+
+   useEffect(() => {
+    function handleClickOutside(event) {
+      if (searchBoxRef.current && !searchBoxRef.current.contains(event.target)) {
+        setShowSearch(false);
+      }
+    }
+
+    if (showSearch) {
+      document.addEventListener("mousedown", handleClickOutside);
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSearch]);
+
 
 
   const isReady = destination && members && budget && startDate && endDate;
@@ -73,12 +117,14 @@ function Home() {
 
           <p className="trip-line__text">
             I want to <span className="handuk">Explore</span> 
-            <input
+          <input
               type="text"
               placeholder="Mathura"
               className="inline-input inline-input--text"
               value={destination}
-              onChange={(e) => setDestination(e.target.value)}
+              readOnly   // prevent typing here
+              onClick={() => setShowSearch(true)} // open overlay
+              style={{ width: "3.5rem", minWidth: "250px" }}
             />
             <br/>
             with
@@ -88,6 +134,7 @@ function Home() {
               className="inline-input inline-input--number"
               value={members}
               onChange={(e) => setMembers(e.target.value)}
+              style={{width: "1.2rem"}}
             />
             <span className="handuk">members</span> in a budget of
             <br/>
@@ -98,6 +145,7 @@ function Home() {
                 className="inline-input inline-input--currency"
                 value={budget ? formatIndianCurrency(budget) : ""}
                 onChange={handleBudgetChange}
+                style={{width: "1.8rem"}}
               />
               <span className="handuk">from</span>
               <div className="outer-date-selector">
@@ -126,6 +174,7 @@ function Home() {
           </p>
         </div>
        <div className="side-img">
+        <div className="side-img-overlay"></div>
           <AnimatePresence mode="wait">
             <motion.img
               key={currentIndex}
@@ -151,6 +200,64 @@ function Home() {
 
         </div>
       </main>
+      <AnimatePresence>
+          {showSearch && (
+            <motion.div
+              className="search-overlay"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <motion.div
+                ref={searchBoxRef} 
+                className="search-box-floating"
+                initial={{ y: -50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -50, opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <input
+                  type="text"
+                  autoFocus
+                  placeholder="Search city..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="floating-input"
+                />
+
+                {suggestions.length > 0 && (
+                <ul className="floating-suggestions">
+                    {suggestions.map((city) => {
+                      const regex = new RegExp(`(${searchQuery})`, "gi");
+                      const highlightedCity = city.name.replace(regex, "<mark>$1</mark>");
+                      const highlightedState = city.state
+                        ? city.state.replace(regex, "<mark>$1</mark>")
+                        : null;
+
+                      return (
+                        <li key={city.id} onClick={() => handleSelectCity(city.name)}>
+                          {city.iconUrl && (
+                            <img src={city.iconUrl} alt={city.name} className="city-icon" />
+                          )}
+                          <span dangerouslySetInnerHTML={{ __html: highlightedCity }} />
+                          {highlightedState && (
+                            <small dangerouslySetInnerHTML={{ __html: highlightedState }} />
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+
+                )}
+
+                <button className="close-btn" onClick={() => setShowSearch(false)}>
+                  ✕
+                </button>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
     </div>
   );
 }

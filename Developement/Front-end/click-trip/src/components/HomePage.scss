@@ -2,6 +2,7 @@
     font-family: inter;
     font-size: 40px;
     font-weight: 400;
+    color: white;
 }
 
 .nav-bar {
@@ -9,19 +10,24 @@
     justify-content: space-around;
     align-items: center;
     padding: 20px 40px;
+
+    ul {
+        display: flex;
+        flex-direction: row;
+        padding: 10px;
+        list-style: none;
+        align-items: center;
+        // color: white;
+
+    }
+
+    li {
+        padding: 10px;
+        color: white;
+    }
 }
 
-ul {
-    display: flex;
-    flex-direction: row;
-    padding: 10px;
-    list-style: none;
-    align-items: center;
-}
 
-li {
-    padding: 10px;
-}
 
 .main-content {
     display: flex;
@@ -65,9 +71,10 @@ li {
             width: 50%;
             outline: none;
             border: none;
+            color: white;
             font-family: "Red Hat Display", sans-serif;
             cursor: pointer;
-            text-align: right;
+            text-align: center;
             font-size: 15px;
             background-color: transparent;
         }

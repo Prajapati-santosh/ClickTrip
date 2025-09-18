@@ -11,7 +11,7 @@
 
     --surface: #ffffff;
 
-    --button-color: #444444;
+    --button-color: #e98d2a;
 }
 
 .home {
@@ -71,6 +71,18 @@
         z-index: -1;
 
 
+        .side-img-overlay {
+            height: 100vh;
+            width: 100vw;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba($color: #000000, $alpha: 0.5);
+            z-index: 1;
+        }
+
+
         img {
             // height: 100%;
             object-fit: cover;
@@ -109,10 +121,11 @@
 
 .trip-line__text {
     font-size: clamp(18px, 3vw, 28px);
+    color: white;
     line-height: 1.5;
     font-weight: 400;
     margin: 0 auto 28px;
-    color: var(--text);
+    // color: var(--text);
     padding: 2rem;
     // background: rgba(255, 255, 255, 0.11);
     // backdrop-filter: blur(11px);
@@ -176,14 +189,14 @@
 }
 
 .inline-input::placeholder {
-    color: var(--muted);
+    // color: var(--muted);
     opacity: 0.7;
 }
 
 .inline-input:focus {
-    border-color: var(--brand);
+    // border-color: var(--brand);
     box-shadow: 0 6px 0 -3px var(--brand-weak);
-    background-color: rgba(255, 255, 255, 0.6);
+    // background-color: rgba(255, 255, 255, 0.6);
 }
 
 .inline-input--text {
@@ -202,7 +215,159 @@
     min-width: 20ch;
     text-align: center;
     cursor: pointer;
-    background: rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0);
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+}
+
+/* 🔎 Overlay background */
+.search-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding-top: 80px;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    /* subtle glass effect */
+}
+
+/* 📦 Floating search box */
+.search-box-floating {
+    position: relative;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    width: 520px;
+    max-width: 92%;
+    box-shadow: 0 6px 28px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.3s ease-out;
+    /* smooth entry */
+}
+
+@keyframes popIn {
+    from {
+        transform: translateY(-20px) scale(0.96);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+    }
+}
+
+/* 🔘 Input wrapper */
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    font-size: 18px;
+    color: #777;
+    transition: color 0.2s ease;
+}
+
+.floating-input {
+    width: 100%;
+    padding: 14px 16px 14px 46px;
+    /* space for icon */
+    border: 1.8px solid #ddd;
+    border-radius: 50px;
+    font-size: 16px;
+    transition: all 0.25s ease;
+    outline: none;
+    background: #fafafa;
+    font-family: "Inter", sans-serif;
+    letter-spacing: 0.2px;
+
+    &:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 10px rgba(37, 99, 235, 0.25);
+        background: #fff;
+    }
+
+    &:focus~.search-icon {
+        color: #2563eb;
+    }
+}
+
+/* 📋 Suggestions list */
+.floating-suggestions {
+    margin: 12px 0 0;
+    padding: 0;
+    list-style: none;
+    max-height: 300px;
+    overflow-y: auto;
+    border-top: 1px solid #eee;
+    scrollbar-width: thin;
+    scrollbar-color: #ccc transparent;
+}
+
+.floating-suggestions::-webkit-scrollbar {
+    width: 6px;
+}
+
+.floating-suggestions::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 6px;
+}
+
+/* 💡 Suggestion item */
+.floating-suggestions li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.1s ease;
+    border-radius: 10px;
+}
+
+.floating-suggestions li:hover {
+    background: #f3f8ff;
+    transform: translateX(2px);
+}
+
+.floating-suggestions span {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111;
+}
+
+.floating-suggestions small {
+    font-size: 13px;
+    color: #666;
+    margin-top: 2px;
+}
+
+.floating-suggestions mark {
+    background: #ffeb3b;
+    color: inherit;
+    font-weight: 600;
+    border-radius: 3px;
+    padding: 0 2px;
+}
+
+.city-icon {
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.close-btn {
+    position: absolute;
+    right: 2%;
+    top: 3%;
+    border: none;
+    background-color: transparent;
 }
 
 
@@ -229,7 +394,7 @@
 }
 
 .cta--disabled {
-    background: #d0d0d0;
+    background: #7a7a7abf;
     color: white;
     cursor: not-allowed;
     opacity: 0.7;
@@ -237,7 +402,7 @@
 
 .cta--ready {
     // background: var(--brand);
-    background: #252525;
+    background: #e98d2a;
     color: white;
     box-shadow: 0 10px 24px rgba(37, 99, 235, 0.25);
 }
