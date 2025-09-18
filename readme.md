@@ -74,3 +74,4 @@ This project is licensed under the MIT License.
 **Happy Travels!**  
 *Let ClickTrip take the planning off your plate — so you can focus on the adventure.*
 
+*********
