@@ -1,5 +1,12 @@
+@font-face {
+  font-family: 'Handuk';
+   src: url('assets/fonts/Handuk.woff');
+       
+}
+
 .App {
   text-align: center;
+   /* font-family: 'Handuk' sans-serif; */
 }
 
 .App-logo {

@@ -21,6 +21,7 @@
     display: grid;
     // grid-template-rows: auto 1fr auto;
     place-items: center;
+    width: 100%;
 }
 
 .home__header {
@@ -41,21 +42,117 @@
     display: grid;
     place-items: center;
     padding: 24px 16px;
+    width: 100%;
 }
 
 .trip-line {
     // width: min(960px, 92vw);
-    text-align: center;
-    font-family: Annie Use Your Telescope;
+    text-align: start;
+    // font-family: handuk;
     margin-bottom: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+
+    .handuk {
+        font-family: 'handuk', sans-serif;
+    }
+
+
+    .side-img {
+        height: 100vh;
+        width: 100vw;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba($color: #000000, $alpha: 5.0);
+        // opacity: 0.6;
+        z-index: -1;
+
+
+        img {
+            // height: 100%;
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+
+        .image-tabs {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+
+            .tab {
+                width: 12px;
+                height: 12px;
+                border-radius: 50%;
+                background-color: #ccc;
+                margin: 0 5px;
+                border: none;
+                cursor: pointer;
+                transition: background-color 0.3s;
+
+                &.active {
+                    background-color: #333;
+                }
+            }
+        }
+    }
+
+    .text-holder {
+        display: flex;
+        align-items: center;
+    }
 }
 
 .trip-line__text {
-    font-size: clamp(20px, 3.2vw, 32px);
+    font-size: clamp(18px, 3vw, 28px);
     line-height: 1.5;
-    font-weight: 600;
+    font-weight: 400;
     margin: 0 auto 28px;
     color: var(--text);
+    padding: 2rem;
+    // background: rgba(255, 255, 255, 0.11);
+    // backdrop-filter: blur(11px);
+    // -webkit-backdrop-filter: blur(11px);
+    // border-radius: 20px;
+    // border: 1px solid rgba(255, 255, 255, 0.3);
+    // box-shadow:
+    //     0 8px 32px rgba(0, 0, 0, 0.1),
+    //     inset 0 1px 0 rgba(48, 48, 48, 0.5),
+    //     inset 0 -1px 0 rgba(255, 255, 255, 0.1),
+    //     inset 0 0 24px 12px rgba(255, 255, 255, 1.2);
+    // position: relative;
+    // overflow: hidden;
+
+    // &::after {
+    //     content: '';
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     width: 1px;
+    //     height: 100%;
+    //     background: linear-gradient(180deg,
+    //             rgba(100, 100, 100, 0.5),
+    //             transparent,
+    //             rgba(68, 68, 68, 0.3));
+    // }
+
+    // &::before {
+    //     content: '';
+    //     position: absolute;
+    //     top: 0;
+    //     left: 0;
+    //     right: 0;
+    //     height: 1px;
+    //     background: linear-gradient(90deg,
+    //             transparent,
+    //             rgba(78, 78, 78, 0.6),
+    //             transparent);
+    // }
+
 }
 
 .trip-line__text span {
