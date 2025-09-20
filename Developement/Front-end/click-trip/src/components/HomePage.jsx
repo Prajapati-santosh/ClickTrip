@@ -50,7 +50,7 @@ export default function HomePage(){
               placeholder="SELECT YOUR CITY"
               readOnly
             />
-            {isOpen ? <IoCaretUpSharp /> : <IoCaretDownSharp />}
+            {isOpen ? <IoCaretUpSharp color='black'/> : <IoCaretDownSharp color='black' />}
           </label>
 
           <AnimatePresence mode="wait">
@@ -62,10 +62,7 @@ export default function HomePage(){
       </div>
             </ul>
         </div>
-        <div className="main-content">
-            <Home/>
-        </div>
-        <Footer/>
+        
        
     </div>
 }

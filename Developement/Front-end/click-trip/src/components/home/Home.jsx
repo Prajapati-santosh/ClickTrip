@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "./Home.scss";
@@ -11,10 +11,13 @@ import Image3 from '../../assets/images/img3.jpg';
 import Image4 from '../../assets/images/img4.jpg';
 import Image5 from '../../assets/images/img5.jpg';
 import Image6 from '../../assets/images/img6.jpg';
+import TransparentPlane from '../../assets/images/transparentPlane.gif'
 import cities from "../../assets/Cities";
+import { useNavigate } from "react-router-dom";
+import { TripContext } from "../../context/TripContext";
 
-
-const images = [Image1, Image2, Image3, Image4, Image5, Image6];
+// const images = [Image1, Image2, Image3, Image4, Image5, Image6];
+const images = [ Image2 ];
 
 
 const formatIndianCurrency = (amount) => {
@@ -35,6 +38,8 @@ function Home() {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState([]);
    const searchBoxRef = useRef(null);
+   const navigate = useNavigate()
+   const {setTripPlan} = useContext(TripContext);
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
@@ -47,6 +52,43 @@ function Home() {
       setSuggestions(filtered);
     }
   }, [searchQuery]);
+
+ const handleSubmit = async () => {
+  if (!isReady) return;
+
+  try {
+    const payload = {
+      location: destination,
+      budget: budget,
+      days_of_stay: startDate && endDate
+        ? Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24))
+        : 0,
+      num_of_people: members,
+    };
+
+    const response = await fetch(
+      "https://clicktrip-593362595694.europe-west1.run.app/gemini",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      }
+    );
+
+    const data = await response.json();
+
+    if(data){
+      setTripPlan(data);
+      navigate("/results");
+
+    }
+
+  } catch (error) {
+    console.error("Error:", error);
+  }
+};
+
+
 
 
   const handleSelectCity = (cityName) => {
@@ -78,12 +120,12 @@ function Home() {
 
   const isReady = destination && members && budget && startDate && endDate;
 
-  const handleSubmit = () => {
-    if (!isReady) return;
-    alert(
-      `Planning trip to ${destination}, with ${members} members, in a budget of ${budget}, from ${startDate.toDateString()} to ${endDate.toDateString()}`
-    );
-  };
+  // const handleSubmit = () => {
+  //   if (!isReady) return;
+  //   alert(
+  //     `Planning trip to ${destination}, with ${members} members, in a budget of ${budget}, from ${startDate.toDateString()} to ${endDate.toDateString()}`
+  //   );
+  // };
 
   useEffect(() => {
   images.forEach((src) => {
@@ -115,16 +157,17 @@ function Home() {
         <div className="trip-line">
         <div className="text-holder">
 
-          <p className="trip-line__text">
+          <div className="trip-line__text">
             I want to <span className="handuk">Explore</span> 
           <input
               type="text"
               placeholder="Mathura"
               className="inline-input inline-input--text"
               value={destination}
-              readOnly   // prevent typing here
-              onClick={() => setShowSearch(true)} // open overlay
-              style={{ width: "3.5rem", minWidth: "250px" }}
+              // readOnly   
+              // onClick={() => setShowSearch(true)} 
+              onChange={(e) => setDestination(e.target.value)}
+              style={{ width: "3rem", minWidth: "200px" }}
             />
             <br/>
             with
@@ -134,18 +177,18 @@ function Home() {
               className="inline-input inline-input--number"
               value={members}
               onChange={(e) => setMembers(e.target.value)}
-              style={{width: "1.2rem"}}
+              style={{width: "1rem"}}
             />
             <span className="handuk">members</span> in a budget of
             <br/>
             <div className="date-selector">
               <input
                 type="text"
-                placeholder="₹2000"
+                placeholder="₹20,000"
                 className="inline-input inline-input--currency"
                 value={budget ? formatIndianCurrency(budget) : ""}
                 onChange={handleBudgetChange}
-                style={{width: "1.8rem"}}
+                style={{width: "1.2rem", textAlign: "start"}}
               />
               <span className="handuk">from</span>
               <div className="outer-date-selector">
@@ -171,11 +214,14 @@ function Home() {
               Plan My Trip
             </button>
           </div>
-          </p>
+          </div>
+        </div>
+        <div className="transparent-plane">
+            <img src={TransparentPlane} alt="transparent plane"/>
         </div>
        <div className="side-img">
         <div className="side-img-overlay"></div>
-          <AnimatePresence mode="wait">
+          {/* <AnimatePresence mode="wait">
             <motion.img
               key={currentIndex}
               src={images[currentIndex]}
@@ -185,7 +231,8 @@ function Home() {
               exit={{ opacity: 0.2 }}
               transition={{ duration: 1 }}
             />
-          </AnimatePresence>
+          </AnimatePresence> */}
+          <img src={Image2} alt="bg-img" className=""/>
 
           {/* <div className="image-tabs">
             {images.map((_, index) => (
@@ -249,10 +296,10 @@ function Home() {
                   </ul>
 
                 )}
-
+{/* 
                 <button className="close-btn" onClick={() => setShowSearch(false)}>
                   ✕
-                </button>
+                </button> */}
               </motion.div>
             </motion.div>
           )}

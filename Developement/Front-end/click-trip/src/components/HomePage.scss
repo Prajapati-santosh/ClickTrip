@@ -2,7 +2,7 @@
     font-family: inter;
     font-size: 40px;
     font-weight: 400;
-    color: white;
+    color: black;
 }
 
 .nav-bar {
@@ -17,13 +17,13 @@
         padding: 10px;
         list-style: none;
         align-items: center;
-        // color: white;
+        // color: black;
 
     }
 
     li {
         padding: 10px;
-        color: white;
+        color: black;
     }
 }
 
@@ -71,7 +71,7 @@
             width: 50%;
             outline: none;
             border: none;
-            color: white;
+            color: black;
             font-family: "Red Hat Display", sans-serif;
             cursor: pointer;
             text-align: center;
@@ -89,7 +89,7 @@
         overflow-y: scroll;
         border: 1px solid #707070;
         z-index: 998;
-        background: white;
+        background: black;
 
         li {
             padding-left: 1rem;
@@ -98,7 +98,7 @@
 
             &:hover {
                 background: #707070;
-                color: white;
+                color: black;
             }
         }
 

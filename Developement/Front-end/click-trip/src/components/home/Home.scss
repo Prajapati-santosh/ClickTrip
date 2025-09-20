@@ -58,6 +58,22 @@
         font-family: 'handuk', sans-serif;
     }
 
+    .transparent-plane {
+        height: 100vh;
+        width: 60vw;
+        position: absolute;
+        top: 80%;
+        left: 70%;
+        transform: translate(-50%, -70%);
+        pointer-events: none;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: contain;
+        }
+    }
+
 
     .side-img {
         height: 100vh;
@@ -71,6 +87,8 @@
         z-index: -1;
 
 
+
+
         .side-img-overlay {
             height: 100vh;
             width: 100vw;
@@ -78,7 +96,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba($color: #000000, $alpha: 0.5);
+            background-color: rgba($color: #000000, $alpha: 0.3);
             z-index: 1;
         }
 
@@ -116,11 +134,13 @@
     .text-holder {
         display: flex;
         align-items: center;
+        margin-right: 28.5vw;
+        margin-top: 4rem;
     }
 }
 
 .trip-line__text {
-    font-size: clamp(18px, 3vw, 28px);
+    font-size: clamp(20px, 3.4vw, 32px);
     color: white;
     line-height: 1.5;
     font-weight: 400;
@@ -179,6 +199,7 @@
     border: none;
     border-bottom: 3px solid rgba(0, 0, 0, 0.15);
     padding: 2px 6px 6px;
+
     margin: 0 6px 4px;
     outline: none;
     font: inherit;
@@ -200,24 +221,37 @@
 }
 
 .inline-input--text {
-    min-width: 12ch;
+    min-width: 9ch;
+    text-align: start;
 }
 
 .inline-input--number {
-    min-width: 5ch;
+    min-width: 3ch;
+
+    // Firefox
+    -moz-appearance: textfield;
+
+    // Chrome, Safari, Edge, Opera
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
 }
 
+
 .inline-input--currency {
-    min-width: 10ch;
+    min-width: 8ch;
 }
 
 .inline-input--date-range {
-    min-width: 20ch;
+    min-width: 2.5rem;
     text-align: center;
     cursor: pointer;
     background: rgba(255, 255, 255, 0);
-    font-size: 1.5rem;
-    letter-spacing: 1px;
+    font-size: 1.4rem;
+    letter-spacing: -1px;
+    margin-top: 8px !important;
 }
 
 /* 🔎 Overlay background */
@@ -237,9 +271,9 @@
 /* 📦 Floating search box */
 .search-box-floating {
     position: relative;
-    background: #fff;
+    // background: #fff;
     border-radius: 16px;
-    padding: 20px;
+    // padding: 20px;
     width: 520px;
     max-width: 92%;
     box-shadow: 0 6px 28px rgba(0, 0, 0, 0.2);
@@ -385,7 +419,8 @@
     justify-content: center;
     gap: 8px;
     font-weight: 700;
-    font-size: clamp(16px, 2.2vw, 18px);
+    font-size: clamp(16px, 2vw, 18px);
+    // letter-spacing: 2px;
     padding: 12px 22px;
     border-radius: 9999px;
     border: none;
