@@ -1,10 +1,19 @@
 import express from 'express';
 import { gemini20Flash, googleAI } from '@genkit-ai/googleai';
 import { genkit } from 'genkit';
+import cors from 'cors';
 
 const app=express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+const corsOptions={
+    origin :'*',
+    methods :['GET', 'POST'],
+    credentials :true
+}
+
+app.use(cors(corsOptions));
+
 
 app.use((req, res, next) => {
   req.setTimeout(300000);
@@ -24,8 +33,17 @@ app.get("/", (req, res) => {
 
 
 app.post("/gemini", async(req, res) => {
+    const {public_key}=req.body;
     const { location, budget, days_of_stay, num_of_people, themes, travel_style} = req.body;
-
+    try{
+        if(public_key!=process.env.API_ACCESS_KEY){
+            console.log(public_key==process.env.API_ACCESS_KEY);
+           return res.status(500).send("Not authenticated");
+        }
+    }catch(error){
+        console.log(error);
+    }
+    
    const itineraryPrompt = `
 Respond ONLY with a valid JSON array of objects. 
 o not include markdown formatting (e.g., backticks json), explanations, greetings, or any extra text.Ensure all strings are properly escaped and do not contain unescaped newlines. Use backticks only if necessary for multiline strings.
