@@ -7,7 +7,7 @@ env:
   PROJECT_ID: clicktrip-472513               # Replace with your GCP project ID
   AR_REPO_NAME: clicktrip                    # Replace with your Artifact Registry repository name
   IMAGE_NAME: clicktrip-bundled-app          # Replace with your Docker image name
-  LOCATION: asia-south1                      # Replace with your repository location
+  LOCATION: asia-south1 (Mumbai)             # Replace with your repository location
 
 jobs:
   build-and-push:
