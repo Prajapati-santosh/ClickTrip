@@ -1,7 +1,8 @@
 # Build Stage
 FROM node:20-alpine AS build
 WORKDIR /Developement/Front-end/click-trip/
-COPY /Developement/Front-end/click-trip/package*.json ./
+COPY package.json ./
+COPY package-lock.json ./
 RUN npm install
 COPY . .
 RUN npm run build
