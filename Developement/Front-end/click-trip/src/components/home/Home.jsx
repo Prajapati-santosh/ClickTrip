@@ -15,6 +15,7 @@ import TransparentPlane from '../../assets/images/transparentPlane.gif'
 import cities from "../../assets/Cities";
 import { useNavigate } from "react-router-dom";
 import { TripContext } from "../../context/TripContext";
+import { LoadingContext } from "../../context/LoadingContext";
 
 // const images = [Image1, Image2, Image3, Image4, Image5, Image6];
 const images = [ Image2 ];
@@ -28,6 +29,8 @@ const formatIndianCurrency = (amount) => {
 };
 
 function Home() {
+  const {isLoading, setIsLoading} = useContext(LoadingContext);
+  const {setTripPlan} = useContext(TripContext);
   const [destination, setDestination] = useState("");
   const [members, setMembers] = useState("");
   const [budget, setBudget] = useState("");
@@ -39,7 +42,8 @@ function Home() {
   const [suggestions, setSuggestions] = useState([]);
    const searchBoxRef = useRef(null);
    const navigate = useNavigate()
-   const {setTripPlan} = useContext(TripContext);
+
+   console.log('access key', process.env.REACT_APP_APIACCESS);
 
   useEffect(() => {
     if (searchQuery.trim() === "") {
@@ -54,7 +58,9 @@ function Home() {
   }, [searchQuery]);
 
  const handleSubmit = async () => {
+  navigate("/results");
   if (!isReady) return;
+  setIsLoading(true);
 
   try {
     const payload = {
@@ -64,6 +70,8 @@ function Home() {
         ? Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24))
         : 0,
       num_of_people: members,
+      public_key: process.env.REACT_APP_APIACCESS
+
     };
 
     const response = await fetch(
@@ -79,12 +87,15 @@ function Home() {
 
     if(data){
       setTripPlan(data);
-      navigate("/results");
+      // navigate("/results");
+      setIsLoading(false);
 
     }
 
+
   } catch (error) {
     console.error("Error:", error);
+    setIsLoading(false);
   }
 };
 
@@ -119,13 +130,6 @@ function Home() {
 
 
   const isReady = destination && members && budget && startDate && endDate;
-
-  // const handleSubmit = () => {
-  //   if (!isReady) return;
-  //   alert(
-  //     `Planning trip to ${destination}, with ${members} members, in a budget of ${budget}, from ${startDate.toDateString()} to ${endDate.toDateString()}`
-  //   );
-  // };
 
   useEffect(() => {
   images.forEach((src) => {
@@ -167,18 +171,29 @@ function Home() {
               // readOnly   
               // onClick={() => setShowSearch(true)} 
               onChange={(e) => setDestination(e.target.value)}
-              style={{ width: "3rem", minWidth: "200px" }}
+              style={{ width: "3rem", minWidth: "200px",  textTransform: "capitalize" }}
             />
             <br/>
             with
-            <input
+           <input
               type="number"
               placeholder="2"
               className="inline-input inline-input--number"
+              min={1}
+              max={50}
               value={members}
-              onChange={(e) => setMembers(e.target.value)}
-              style={{width: "1rem"}}
+              onChange={(e) => {
+                let val = Number(e.target.value);
+
+                
+                if (val < 1) val = 1;
+                if (val > 50) val = 50;
+
+                setMembers(val);
+              }}
+              style={{ width: "3rem" }} 
             />
+
             <span className="handuk">members</span> in a budget of
             <br/>
             <div className="date-selector">

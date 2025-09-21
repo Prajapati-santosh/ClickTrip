@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import "./Results.scss";
 import { TripContext } from "../../context/TripContext";
-
-// Icons
 import AccomodationIcon from "../../assets/resultsIcon/accomodation.svg";
 import TravelIcon from "../../assets/resultsIcon/travel.svg";
 import RupeeIcon from "../../assets/resultsIcon/rupee.svg";
+import { LoadingContext } from "../../context/LoadingContext";
 
-// 🔹 Skeleton component
+// Skeleton component
 const SkeletonCard = () => (
   <div className="results__card skeleton">
     <div className="skeleton__title"></div>
@@ -22,47 +21,75 @@ const SkeletonCard = () => (
 
 const Results = () => {
   const { tripPlan } = useContext(TripContext);
-  const [loading, setLoading] = useState(true);
+  const { isLoading } = useContext(LoadingContext);
+  const [savedTrip, setSavedTrip] = useState([]);
 
-  // simulate API delay
+  // 🔹 Load saved trip from localStorage on first mount
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 1500);
-    return () => clearTimeout(timer);
+    const storedTrip = localStorage.getItem("tripPlan");
+    if (storedTrip) {
+      setSavedTrip(JSON.parse(storedTrip));
+    }
   }, []);
 
-  // fallback demo data if tripPlan is empty
-  const customResult = tripPlan || [
-    {
-        "title": "Day 1: Arrival and Dehradun Exploration",
-        "summary": "Arrive in Dehradun, check into your accommodation, and begin exploring the city center. Visit the iconic Clock Tower, browse the local markets at Paltan Bazaar, and enjoy a delicious North Indian dinner. Consider a relaxing evening stroll along Rajpur Road.",
-        "transportation": "Pre-booked taxi from airport/railway station, local auto-rickshaws, walking.",
-        "accommodationSuggestion": "Mid-range hotel near Rajpur Road (approx. ₹3000 per night)",
-        "dailyCostEstimate": "Activities: ₹1000, Food: ₹1500, Transport: ₹800, Accommodation: ₹3000. Total: ₹6300"
-    },
-    {
-        "title": "Day 2: Tapkeshwar Temple and Robber's Cave Adventure",
-        "summary": "Start your day with a visit to the sacred Tapkeshwar Temple, known for its unique Shiva Lingam. Afterwards, head to Robber's Cave (Gucchupani) for a refreshing natural cave exploration. In the evening, enjoy a cooking class focused on Garhwali cuisine, offering a hands-on culinary experience. Note: Entry fee for Robber's Cave is minimal.",
-        "transportation": "Local bus or auto-rickshaw to Tapkeshwar Temple and Robber's Cave, pre-booked taxi for cooking class (if outside city center).",
-        "accommodationSuggestion": "Mid-range hotel near Rajpur Road (approx. ₹3000 per night)",
-        "dailyCostEstimate": "Activities: ₹1200 (including cooking class), Food: ₹1300, Transport: ₹1000, Accommodation: ₹3000. Total: ₹6500"
-    },
-    {
-        "title": "Day 3: Sahastradhara and Forest Research Institute",
-        "summary": "Embark on a day trip to Sahastradhara, a beautiful waterfall and sulphur springs. Enjoy the scenic beauty and take a dip in the therapeutic waters. Later, visit the Forest Research Institute (FRI), an architectural marvel and a center of forestry research. Conclude the day with a relaxing dinner at a restaurant with a view.",
-        "transportation": "Pre-booked taxi or shared taxi to Sahastradhara, local auto-rickshaw within FRI campus.",
-        "accommodationSuggestion": "Mid-range hotel near Rajpur Road (approx. ₹3000 per night)",
-        "dailyCostEstimate": "Activities: ₹1500 (including Sahastradhara entry and FRI entry), Food: ₹1400, Transport: ₹1200, Accommodation: ₹3000. Total: ₹7100"
-    },
-    {
-        "title": "Day 4: Mindrolling Monastery and Departure",
-        "summary": "Visit the Mindrolling Monastery, one of the largest Buddhist centers in India, known for its stunning architecture and peaceful ambiance. Explore the monastery grounds, admire the intricate artwork, and meditate in the serene environment. After lunch, head to the airport/railway station for your departure.",
-        "transportation": "Pre-booked taxi to Mindrolling Monastery and airport/railway station.",
-        "accommodationSuggestion": "N/A - Departure Day",
-        "dailyCostEstimate": "Activities: ₹800, Food: ₹1000, Transport: ₹1500. Total: ₹3300. Accommodation (last 3 nights): ₹9000. Total trip cost for 2 people (including ₹10,000 buffer for shopping/misc. expenses): approx. ₹89400.  This allows for customization within the set budget."
+  // 🔹 Save tripPlan to localStorage whenever it changes
+  useEffect(() => {
+    if (tripPlan && tripPlan.length > 0) {
+      localStorage.setItem("tripPlan", JSON.stringify(tripPlan));
+      setSavedTrip(tripPlan);
     }
+  }, [tripPlan]);
+
+  
+ const fallbackData = [
+  {
+    title: "Day 1: Arrival and City Exploration",
+    summary:
+      "Arrive at your destination and check into your hotel. Spend the afternoon exploring the local markets and famous landmarks in the city center. In the evening, enjoy a traditional dinner at a local restaurant and take a leisurely walk around the main square.",
+    transportation:
+      "Pre-booked taxi from airport/railway station, walking, and local auto-rickshaws.",
+    accommodationSuggestion:
+      "Comfortable 3-star hotel near the city center (approx. ₹2800–₹3200 per night).",
+    dailyCostEstimate:
+      "Activities: ₹1000, Food: ₹1400, Transport: ₹700, Accommodation: ₹3000. Total: ₹6100",
+  },
+  {
+    title: "Day 2: Cultural Tour and Local Experience",
+    summary:
+      "Begin your day with a visit to a popular temple or heritage site. Continue with a guided cultural tour to learn about local history and traditions. In the afternoon, enjoy a hands-on experience such as a cooking class or handicraft workshop. End the day with a rooftop dinner overlooking the city.",
+    transportation:
+      "Shared taxi or local bus for sightseeing, pre-booked cab for evening activity.",
+    accommodationSuggestion:
+      "Comfortable 3-star hotel near the city center (approx. ₹3000 per night).",
+    dailyCostEstimate:
+      "Activities: ₹1500, Food: ₹1300, Transport: ₹900, Accommodation: ₹3000. Total: ₹6700",
+  },
+  {
+    title: "Day 3: Nature and Adventure",
+    summary:
+      "Head out for a short excursion to a scenic natural spot such as a waterfall, caves, or nearby hills. Spend time enjoying outdoor activities like light trekking, photography, or simply relaxing in nature. Return to the city in the evening and enjoy a casual dinner at a local eatery.",
+    transportation:
+      "Pre-booked taxi or shared transport to the excursion spot, walking locally.",
+    accommodationSuggestion:
+      "Comfortable 3-star hotel near the city center (approx. ₹3000 per night).",
+    dailyCostEstimate:
+      "Activities: ₹1600, Food: ₹1400, Transport: ₹1200, Accommodation: ₹3000. Total: ₹7200",
+  },
+  {
+    title: "Day 4: Relaxation and Departure",
+    summary:
+      "Spend your final morning visiting a peaceful location such as a monastery, garden, or museum. Enjoy a light lunch before heading to the airport or railway station for your departure.",
+    transportation: "Pre-booked taxi to sightseeing spot and onward departure.",
+    accommodationSuggestion: "N/A - Departure Day",
+    dailyCostEstimate:
+      "Activities: ₹800, Food: ₹1000, Transport: ₹1200. Total: ₹3000. Accommodation (previous 3 nights): ₹9000. Approximate total trip cost for 2 people: ₹45,000–₹50,000 including meals, transport, and activities.",
+  },
 ];
 
-  if (loading) {
+
+  const finalResult = savedTrip.length > 0 ? savedTrip : fallbackData;
+
+  if (isLoading) {
     return (
       <div className="results">
         <h1 className="results__title">Your Trip Itinerary</h1>
@@ -75,7 +102,7 @@ const Results = () => {
     );
   }
 
-  if (!customResult || customResult.length === 0) {
+  if (!finalResult || finalResult.length === 0) {
     return (
       <div className="results__empty">
         No trip data found. Plan your trip first!
@@ -88,7 +115,7 @@ const Results = () => {
       <h1 className="results__title">Your Trip Itinerary</h1>
 
       <div className="results__list">
-        {customResult.map((day, index) => (
+        {finalResult.map((day, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0, y: 30 }}
