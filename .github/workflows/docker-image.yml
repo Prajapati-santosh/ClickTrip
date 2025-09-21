@@ -1,19 +1,41 @@
-name: Docker Image CI
-
+name: Build and Push Docker Image to Artifact Registry
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
+
+env:
+  PROJECT_ID: clicktrip-472513               # Replace with your GCP project ID
+  AR_REPO_NAME: clicktrip                    # Replace with your Artifact Registry repository name
+  IMAGE_NAME: clicktrip-bundled-app          # Replace with your Docker image name
+  LOCATION: asia-south1                      # Replace with your repository location
 
 jobs:
-
-  build:
-
+  build-and-push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build Developement/Front-end/click-trip --file Developement/Front-end/click-trip/Dockerfile --tag my-react-app:${{ github.sha }}
+      - name: Checkout
+        uses: actions/checkout@v4
 
+      - name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/593362595694/locations/global/workloadIdentityPools/clicktrip/providers/github-provider'
+          service_account: 'clicktrip-artificat-pusher@clicktrip-472513.iam.gserviceaccount.com'
+          token_format: 'access_token'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Configure Docker'
+        run: |
+          gcloud auth configure-docker "${{ env.LOCATION }}-docker.pkg.dev" --quiet
+
+      - name: 'Build Docker Image'
+        run: docker build . --file Dockerfile --tag "${{ env.LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+
+      - name: 'Push Docker Image'
+        run: docker push "${{ env.LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.AR_REPO_NAME }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
