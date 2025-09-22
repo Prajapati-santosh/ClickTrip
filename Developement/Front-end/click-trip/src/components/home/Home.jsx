@@ -43,8 +43,8 @@ function Home() {
    const searchBoxRef = useRef(null);
    const navigate = useNavigate()
 
-   console.log('access key', process.env.REACT_APP_APIACCESS);
 
+   
   useEffect(() => {
     if (searchQuery.trim() === "") {
       setSuggestions([]);
